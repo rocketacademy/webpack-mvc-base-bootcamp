@@ -1,12 +1,12 @@
 const { merge } = require('webpack-merge');
 const path = require('path');
 
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
 const common = require('./webpack.common.js');
 
 module.exports = merge(common, {
   entry: {
-    main: './src/index.js',
+    app: './src/index.js',
   },
   mode: 'development',
   devtool: 'inline-source-map',
@@ -26,11 +26,9 @@ module.exports = merge(common, {
     ],
   },
   plugins: [
-    new HtmlWebpackPlugin({
-      // name this file main, so that it does not get automatically requested as a static file
-      filename: './main.html',
-      template: path.resolve(__dirname, '..', 'src', 'main.html'),
-    }),
-
+    new WebpackManifestPlugin({
+      // we need this because webpack automatically adds auto to name
+      publicPath: '',
+    })
   ].filter(Boolean),
 });
